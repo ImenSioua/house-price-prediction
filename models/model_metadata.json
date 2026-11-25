@@ -1,0 +1,77 @@
+{
+  "modele": "Gradient Boosting",
+  "features": [
+    "1stFlrSF",
+    "2ndFlrSF",
+    "BedroomAbvGr",
+    "BsmtExposure",
+    "BsmtFinSF1",
+    "BsmtFinType1",
+    "BsmtUnfSF",
+    "GarageArea",
+    "GarageFinish",
+    "GarageYrBlt",
+    "GrLivArea",
+    "KitchenQual",
+    "LotArea",
+    "LotFrontage",
+    "MasVnrArea",
+    "OpenPorchSF",
+    "OverallCond",
+    "OverallQual",
+    "TotalBsmtSF",
+    "YearBuilt",
+    "YearRemodAdd"
+  ],
+  "derived_features": [
+    "TotalLivingArea",
+    "PropertyAge",
+    "RemodelAge",
+    "BasementFinishRatio",
+    "LivingToLotRatio",
+    "AreaEfficiency"
+  ],
+  "ordinal_mapping": {
+    "KitchenQual": {
+      "Po": 1,
+      "Fa": 2,
+      "TA": 3,
+      "Gd": 4,
+      "Ex": 5
+    },
+    "BsmtFinType1": {
+      "Unf": 1,
+      "LwQ": 2,
+      "Rec": 3,
+      "BLQ": 4,
+      "ALQ": 5,
+      "GLQ": 6
+    },
+    "GarageFinish": {
+      "Unf": 1,
+      "RFn": 2,
+      "Fin": 3
+    },
+    "BsmtExposure": {
+      "No": 1,
+      "Mn": 2,
+      "Av": 3,
+      "Gd": 4
+    }
+  },
+  "ref_year": 2024,
+  "seed": 42,
+  "metriques_test": {
+    "r2": 0.9052,
+    "rmse": 26967.49,
+    "mae": 17181.4
+  },
+  "n_train": 1168,
+  "n_test": 292,
+  "n_total": 1460,
+  "versions": {
+    "python": "3.13.5",
+    "scikit-learn": "1.9.1",
+    "pandas": "3.1.1"
+  }
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction Complète - Prix Maison</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; }
+        h1 { text-align: center; color: #2c3e50; }
+        
+        /* Grille pour afficher les champs proprement */
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 colonnes */
+            gap: 20px;
+        }
+        
+        fieldset {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        legend { font-weight: bold; color: #007bff; padding: 0 5px; }
+        
+        label { display: block; margin-top: 10px; font-size: 0.9em; font-weight: 600; }
+        input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #218838; }
+
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+            font-size: 1.5em;
+            border-radius: 8px;
+            display: none; /* Caché par défaut */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🏡 Prédiction Immobilière Complète</h1>
+
+    <form id="houseForm">
+        <div class="grid-container">
+            
+            <!-- 1. Informations Générales -->
+            <fieldset>
+                <legend>Général</legend>
+                <label>Surface Terrain (LotArea)</label>
+                <!-- <input type="number" id="LotArea" value="8450"> -->
+                <input type="number" id="LotArea" >
+
+                <label>Façade sur rue (LotFrontage)</label>
+                <!-- <input type="number" id="LotFrontage" value="65"> -->
+                <input type="number" id="LotFrontage">
+
+                <label>Année Construction (YearBuilt)</label>
+                <!-- <input type="number" id="YearBuilt" value="2003"> -->
+                 <input type="number" id="YearBuilt">
+
+                <label>Année Rénovation (YearRemodAdd)</label>
+                 <!-- <input type="number" id="YearRemodAdd" value="2003"> -->
+                <input type="number" id="YearRemodAdd" >
+
+                <label>Qualité Globale (1-10) (OverallQual)</label>
+                <input type="number" id="OverallQual"  min="1" max="10">
+
+                <label>Condition Globale (1-10) (OverallCond)</label>
+                <input type="number" id="OverallCond"  min="1" max="10">
+            </fieldset>
+
+            <!-- 2. Surface Habitable -->
+            <fieldset>
+                <legend>Intérieur & Surface</legend>
+                <label>Surface 1er étage (1stFlrSF)</label>
+                <input type="number" id="1stFlrSF" >
+
+                <label>Surface 2ème étage (2ndFlrSF)</label>
+                <input type="number" id="2ndFlrSF" >
+
+                <label>Surface Habitable Totale (GrLivArea)</label>
+                <input type="number" id="GrLivArea" >
+
+                <label>Nombre de Chambres (BedroomAbvGr)</label>
+                <input type="number" id="BedroomAbvGr" >
+
+                <label>Qualité Cuisine (KitchenQual)</label>
+                <select id="KitchenQual">
+                    <option value="Ex">Excellente (Ex)</option>
+                    <option value="Gd" selected>Bonne (Gd)</option>
+                    <option value="TA">Moyenne (TA)</option>
+                    <option value="Fa">Passable (Fa)</option>
+                </select>
+            </fieldset>
+
+            <!-- 3. Sous-sol -->
+            <fieldset>
+                <legend>Sous-sol</legend>
+                <label>Surface Sous-sol Total (TotalBsmtSF)</label>
+                <input type="number" id="TotalBsmtSF">
+
+                <label>Surface Finie Type 1 (BsmtFinSF1)</label>
+                <input type="number" id="BsmtFinSF1">
+
+                <label>Surface Non Finie (BsmtUnfSF)</label>
+                <input type="number" id="BsmtUnfSF">
+
+                <label>Exposition (BsmtExposure)</label>
+                <select id="BsmtExposure">
+                    <option value="No" selected>Aucune (No)</option>
+                    <option value="Av">Moyenne (Av)</option>
+                    <option value="Gd">Bonne (Gd)</option>
+                    <option value="Mn">Minimum (Mn)</option>
+                </select>
+
+                <label>Type Finition (BsmtFinType1)</label>
+                <select id="BsmtFinType1">
+                    <option value="GLQ" selected>Bonne Qualité (GLQ)</option>
+                    <option value="ALQ">Moyenne (ALQ)</option>
+                    <option value="BLQ">Sous la moyenne (BLQ)</option>
+                    <option value="LwQ">Faible (LwQ)</option>
+                    <option value="Unf">Non fini (Unf)</option>
+                    <option value="Rec">Moyen (Rec)</option>
+                </select>
+            </fieldset>
+
+            <!-- 4. Garage & Extérieur -->
+            <fieldset>
+                <legend>Garage & Extérieur</legend>
+                <label>Surface Garage (GarageArea)</label>
+                <input type="number" id="GarageArea" >
+
+                <label>Année Garage (GarageYrBlt)</label>
+                <input type="number" id="GarageYrBlt">
+
+                <label>Finition Garage (GarageFinish)</label>
+                <select id="GarageFinish">
+                    <option value="RFn" selected>Fini (RFn)</option>
+                    <option value="Unf">Non fini (Unf)</option>
+                    <option value="Fin">Complètement fini (Fin)</option>
+                </select>
+                
+                <label>Porche Ouvert (OpenPorchSF)</label>
+                <input type="number" id="OpenPorchSF">
+
+                <label>Maçonnerie Extérieure (MasVnrArea)</label>
+                <input type="number" id="MasVnrArea">
+            </fieldset>
+        </div>
+
+        <button type="submit">💰 Calculer le Prix</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('houseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = "block";
+            resultDiv.innerText = "Calcul en cours...";
+
+            // Liste de tous les IDs correspondant à tes colonnes
+            const fieldIds = [
+                "1stFlrSF", "2ndFlrSF", "BedroomAbvGr", "BsmtExposure", "BsmtFinSF1", 
+                "BsmtFinType1", "BsmtUnfSF", "GarageArea", "GarageFinish", 
+                "GarageYrBlt", "GrLivArea", "KitchenQual", "LotArea", "LotFrontage", 
+                "MasVnrArea", "OpenPorchSF", "OverallCond", "OverallQual", "TotalBsmtSF", 
+                "YearBuilt", "YearRemodAdd"
+            ];
+
+            const features = {};
+            const API_URL = (location.protocol === 'file:') ? 'http://127.0.0.1:8000' : '';
+
+            // Récupération automatique des valeurs
+            fieldIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    // Si c'est un nombre, on convertit, sinon on laisse le texte
+                    features[id] = isNaN(element.value) ? element.value : parseFloat(element.value);
+                }
+            });
+
+            try {
+                const response = await fetch(API_URL + '/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(features)
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    resultDiv.style.backgroundColor = "#dc3545"; // Rouge
+                    resultDiv.innerText = "Erreur : " + data.error;
+                } else {
+                    const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.predicted_price);
+                    resultDiv.style.backgroundColor = "#28a745"; // Vert
+                    const fmt = v => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(v);
+                    resultDiv.innerHTML = "🏷️ Prix Estimé : <br>" + price +
+                        "<br><small>Erreur typique du modèle : ± " + fmt(data.typical_error) +
+                        " (" + fmt(data.range_low) + " – " + fmt(data.range_high) + ")</small>";
+                }
+            } catch (error) {
+                console.error(error);
+                resultDiv.style.backgroundColor = "#dc3545";
+                resultDiv.innerText = "Erreur de connexion avec l'API.";
+            }
+        });
+    </script>
+
+</body>
+</html>
